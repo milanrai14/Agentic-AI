@@ -29,13 +29,13 @@ graph.add_node("chat_node", chat_node)
 #add edges 
 graph.add_edge(START, 'chat_node')
 graph.add_edge('chat_node', END)
-workflow = graph.compile(checkpointer=checkpointer)
+chatbot = graph.compile(checkpointer=checkpointer)
 
 
 inital_state = {
     "messages": [HumanMessage(content="What is the capital of Nepal?")]
 }
-workflow.invoke(inital_state)['messages'][-1].content
+chatbot.invoke(inital_state)['messages'][-1].content
 
 thread_id = '1'
 while True:
@@ -45,7 +45,7 @@ while True:
     if user_message.strip().lower() in ['exit', 'quit', 'bye', '0']:
         break
     config = {'configurable': {'thread_id': thread_id}}
-    response = workflow.invoke({
+    response = chatbot.invoke({
 
         'messages': [HumanMessage(content=user_message)]
     }, config=config)
