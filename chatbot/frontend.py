@@ -18,10 +18,10 @@ user_input = st.chat_input("Type here ")
 
 if user_input: 
     #first add the message to message history
-    message_history.append({'role': 'user', 'content': user_input})
+    st.session_state['message_history'].append({'role': 'user', 'content': user_input})
     with st.chat_message("user"):
         st.text(user_input)
 
-    message_history.append({'role': 'assistant', 'content': user_input})
+    st.session_state['message_history'].append({'role': 'assistant', 'content': user_input})
     with st.chat_message("assistant"): 
         st.text(user_input)
