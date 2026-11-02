@@ -16,13 +16,36 @@ for message in st.session_state['message_history']:
 user_input = st.chat_input("Type here ")
 
 
-if user_input: 
-    #first add the message to message history
-    st.session_state['message_history'].append({'role': 'user', 'content': user_input})
+
+if user_input:
+    # First, add the user message to message history
+    st.session_state['message_history'].append({
+        'role': 'user',
+        'content': user_input
+    })
+
     with st.chat_message("user"):
         st.text(user_input)
-    response = chatbot.invoke({"messages": [HumanMessage(content=user_input)]}, config={"configurable": {'thread_id': "milan_12"}})
-    ai_messages= response['messages'][-1].content
-    st.session_state['message_history'].append({'role': 'assistant', 'content': ai_messages})
-    with st.chat_message("assistant"): 
-        st.text(ai_messages)
+
+    # Stream the response from LangGraph
+    response = chatbot.stream(
+        {"messages": [HumanMessage(content=user_input)]},
+        config={"configurable": {"thread_id": "milan_12"}},
+        stream_mode="messages"
+    )
+
+    ai_messages = ""
+
+    with st.chat_message("assistant"):
+        message_placeholder = st.empty()
+
+        for message_chunk, metadata in response:
+            if message_chunk.content:
+                ai_messages += message_chunk.content
+                message_placeholder.markdown(ai_messages)
+
+    # Save the completed AI response to Streamlit history
+    st.session_state['message_history'].append({
+        'role': 'assistant',
+        'content': ai_messages
+    })
