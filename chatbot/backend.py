@@ -36,3 +36,18 @@ inital_state = {
     "messages": [HumanMessage(content="What is the capital of Nepal?")]
 }
 workflow.invoke(inital_state)['messages'][-1].content
+
+thread_id = '1'
+while True:
+    user_message = input("type : ")
+    print("User: ", user_message)
+
+    if user_message.strip().lower() in ['exit', 'quit', 'bye', '0']:
+        break
+    config = {'configurable': {'thread_id': thread_id}}
+    response = workflow.invoke({
+
+        'messages': [HumanMessage(content=user_message)]
+    }, config=config)
+
+    print('AI: ', response['messages'][-1].content)
