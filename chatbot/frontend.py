@@ -1,6 +1,6 @@
 import streamlit as st
 from backend import chatbot
-
+from langchain_core.messages import HumanMessage
 #st.session_state -> dict -> 
 
 if 'message_history' not in st.session_state: 
@@ -21,7 +21,8 @@ if user_input:
     st.session_state['message_history'].append({'role': 'user', 'content': user_input})
     with st.chat_message("user"):
         st.text(user_input)
-
-    st.session_state['message_history'].append({'role': 'assistant', 'content': user_input})
+    response = chatbot.invoke({"messages": [HumanMessage(content=user_input)]})
+    ai_messages= response['messages'][-1].content
+    st.session_state['message_history'].append({'role': 'assistant', 'content': ai_messages})
     with st.chat_message("assistant"): 
-        st.text(user_input)
+        st.text(ai_messages)
