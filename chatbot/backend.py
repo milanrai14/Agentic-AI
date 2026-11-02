@@ -19,3 +19,14 @@ def chat_node(state: ChatState):
 
     # response store state
     return {"messages": response}
+
+checkpointer = MemorySaver()
+graph = StateGraph(ChatState)
+
+#add nodes
+graph.add_node("chat_node", chat_node)
+
+#add edges 
+graph.add_edge(START, 'chat_node')
+graph.add_edge('chat_node', END)
+workflow = graph.compile(checkpointer=checkpointer)
