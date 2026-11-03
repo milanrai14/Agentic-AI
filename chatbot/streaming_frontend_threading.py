@@ -59,6 +59,7 @@ for thread_id in st.session_state['chat_threads']:
             else: 
                 role='assistant'
             temp_message_dict.append({'role': role, 'content': message.content})
+        st.session_state['message_history'] = temp_message_dict
 
 
 
