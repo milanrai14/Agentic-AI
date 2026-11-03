@@ -12,7 +12,13 @@ class ChatState(TypedDict):
 
 llm = ChatOllama(model='llama3.2')
 
-sqlite3.connector(database='chatbot.db', check_same_thread=False)
+
+
+connection = sqlite3.connect(
+    database="chatbot.db",
+    check_same_thread=False
+)
+
 def chat_node(state: ChatState): 
     #take a user query from state
     messages = state['messages']
@@ -23,7 +29,7 @@ def chat_node(state: ChatState):
     # response store state
     return {"messages": response}
 
-checkpointer = SqliteSaver()
+checkpointer = SqliteSaver(connection)
 graph = StateGraph(ChatState)
 
 #add nodes
@@ -35,3 +41,20 @@ graph.add_edge('chat_node', END)
 chatbot = graph.compile(checkpointer=checkpointer)
 
 
+
+#test
+
+response = chatbot.invoke(
+    {
+        "messages": [
+            HumanMessage(content="Hi, my name is Milan Rai.")
+        ]
+    },
+    config={
+        "configurable": {
+            "thread_id": "thread_1"
+        }
+    }
+)
+
+print(response["messages"][-1].content)
