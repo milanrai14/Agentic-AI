@@ -13,9 +13,21 @@ def add_thread(thread_id):
     if thread_id not in st.session_state['chat_threads']: 
         st.session_state['chat_threads'].append(thread_id)
 
-def load_conversation(thread_id): 
-    return chatbot.get_state(config={"configurable": {'thread_id': thread_id}}).values['messages']
+def load_conversation(thread_id):
+    config = {
+        "configurable": {
+            "thread_id": thread_id
+        }
+    }
 
+    state = chatbot.get_state(config)
+
+    # Check whether the thread has a saved state
+    if not state or not state.values:
+        return []
+
+    # Safely retrieve messages
+    return state.values.get("messages", [])
 # Reset chat
 def reset_chat():
     st.session_state["thread_id"] = generate_thread_id()
