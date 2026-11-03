@@ -17,6 +17,7 @@ def add_thread(thread_id):
 # Reset chat
 def reset_chat():
     st.session_state["thread_id"] = generate_thread_id()
+    add_thread(st.session_state['thread_id'])
     st.session_state["message_history"] = []
 
 
