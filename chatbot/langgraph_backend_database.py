@@ -47,7 +47,7 @@ chatbot = graph.compile(checkpointer=checkpointer)
 response = chatbot.invoke(
     {
         "messages": [
-            HumanMessage(content="Hi, my name is Milan Rai.")
+            HumanMessage(content="What is my name")
         ]
     },
     config={
