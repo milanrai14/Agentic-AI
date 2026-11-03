@@ -45,7 +45,7 @@ st.sidebar.header("My conversation")
 # )
 
 for thread_id in st.session_state['chat_threads']: 
-    st.sidebar.text( f"Thread ID: {thread_id}")
+    st.sidebar.button( f"Thread ID: {thread_id}")
 
 
 # Load conversation history
