@@ -44,17 +44,20 @@ chatbot = graph.compile(checkpointer=checkpointer)
 
 #test
 
-response = chatbot.invoke(
-    {
-        "messages": [
-            HumanMessage(content="What is my name")
-        ]
-    },
-    config={
-        "configurable": {
-            "thread_id": "thread_1"
-        }
-    }
-)
+# response = chatbot.invoke(
+#     {
+#         "messages": [
+#             HumanMessage(content="What is my name")
+#         ]
+#     },
+#     config={
+#         "configurable": {
+#             "thread_id": "thread_1"
+#         }
+#     }
+# )
 
-print(response["messages"][-1].content)
+# print(response["messages"][-1].content)
+
+for checkpoint in checkpointer.list(None): 
+    print(checkpoint.config['configurable']['thread_id'])
