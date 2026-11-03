@@ -1,8 +1,10 @@
+import sqlite3
+
 from langgraph.graph import StateGraph, START, END
 from typing import TypedDict , Annotated
 from langchain_core.messages import BaseMessage, HumanMessage
 from langchain_ollama import ChatOllama
-from langgraph.checkpoint.memory import MemorySaver
+from langgraph.checkpoint.sqlite import SqliteSaver 
 
 from langgraph.graph.message import add_messages
 class ChatState(TypedDict): 
@@ -10,6 +12,7 @@ class ChatState(TypedDict):
 
 llm = ChatOllama(model='llama3.2')
 
+sqlite3.connector(database='chatbot.db', check_same_thread=False)
 def chat_node(state: ChatState): 
     #take a user query from state
     messages = state['messages']
@@ -20,7 +23,7 @@ def chat_node(state: ChatState):
     # response store state
     return {"messages": response}
 
-checkpointer = MemorySaver()
+checkpointer = SqliteSaver()
 graph = StateGraph(ChatState)
 
 #add nodes
