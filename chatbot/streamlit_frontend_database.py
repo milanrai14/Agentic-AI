@@ -1,10 +1,12 @@
 
 import streamlit as st
+from dotenv import load_dotenv
 from langgraph_backend_database import chatbot, retrive_all_threads
 from langchain_core.messages import HumanMessage
 import uuid
 
 
+load_dotenv()
 # Utility function
 def generate_thread_id():
     return str(uuid.uuid4())
