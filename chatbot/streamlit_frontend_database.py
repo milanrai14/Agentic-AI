@@ -96,14 +96,19 @@ if user_input:
     with st.chat_message("user"):
         st.markdown(user_input)
 
+    CONFIG = {
+            "configurable": {
+                "thread_id": st.session_state["thread_id"]
+            }, 
+            'metadata': {
+                "thread_id": st.session_state['thread_id']
+            },
+            "run_name":"chat_run" 
+        }
     # Stream LangGraph response
     response = chatbot.stream(
         {"messages": [HumanMessage(content=user_input)]},
-        config={
-            "configurable": {
-                "thread_id": st.session_state["thread_id"]
-            }
-        },
+        config=CONFIG,
         stream_mode="messages"
     )
 
