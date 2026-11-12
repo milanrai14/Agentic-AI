@@ -114,3 +114,6 @@ graph.add_edge(START, "chat_node")
 # If the LLM asked for a tool, go to ToolNode; elsse finish
 graph.add_conditional_edges("chat_node", tools_condition)
 graph.add_edge("tools", "chat_node")
+
+chatbot = graph.compile()
+chatbot
