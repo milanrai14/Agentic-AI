@@ -18,3 +18,29 @@ API_KEY = os.getenv('ALPHA_VANTAGE_API_KEY')
 def get_llm(): 
     llm = ChatOllama(model='llama3.2')
     return llm
+
+#tools 
+search_tool = DuckDuckGoSearchRun(region='us-en')
+
+@tool
+def calculator(first_num: float, second_num: float, operation: str)->dict: 
+    """
+    Perform a basic arithematic operation on two numbers.
+    Supported operation: add, sub, mul, div 
+    """
+    try: 
+        if operation == 'add': 
+            result = first_num + second_num
+        elif operation == 'sub': 
+            result = first_num - second_num
+        elif operation == 'mul': 
+            result = first_num * second_num
+        elif operation == 'div': 
+            if second_num == 0: 
+                return {"error": "Division by zero is not allowed"}
+            result = first_num / second_num
+        else:
+            return {"error": f"Unsupported operation {operation}"}
+        return{ "first_num": first_num, "Second_num": second_num, "Operation": operation, "result": result}
+    except Exception as e:
+        return {"error": str(e)}
