@@ -14,3 +14,7 @@ import os
 
 load_dotenv()
 API_KEY = os.getenv('ALPHA_VANTAGE_API_KEY')
+
+def get_llm(): 
+    llm = ChatOllama(model='llama3.2')
+    return llm
