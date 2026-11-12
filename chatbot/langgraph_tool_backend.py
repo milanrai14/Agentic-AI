@@ -80,3 +80,11 @@ def get_stock_price(symbol: str) -> dict:
         "change": quote.get("09. change"),
         "change_percent": quote.get("10. change percent")
     }
+
+# Make tool list 
+tools = [get_stock_price, search_tool, calculator]
+
+# make  the llm tool awate
+llm = get_llm()
+
+llm_with_tools = llm.bind_tools(tools)
