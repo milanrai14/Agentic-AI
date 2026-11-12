@@ -11,6 +11,9 @@ from langchain_core.tools import tool
 import requests
 import random
 import os
+import sqlite3
+from langgraph.checkpoint.sqlite import SqliteSaver
+
 
 load_dotenv()
 API_KEY = os.getenv('ALPHA_VANTAGE_API_KEY')
@@ -103,6 +106,8 @@ def chat_node(state: ChatState):
 tool_node = ToolNode(tools) # Executes tool calls
 
 
+conn = sqlite3.connect(database='chatbot.db', check_same_thread=False)
+checkpointer = SqliteSaver(conn=conn)
 #graph structure
 graph = StateGraph(ChatState)
 graph.add_node('chat_node', chat_node)
@@ -115,5 +120,4 @@ graph.add_edge(START, "chat_node")
 graph.add_conditional_edges("chat_node", tools_condition)
 graph.add_edge("tools", "chat_node")
 
-chatbot = graph.compile()
-chatbot
+chatbot = graph.compile(checkpointer=checkpointer)
