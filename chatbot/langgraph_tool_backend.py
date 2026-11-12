@@ -44,3 +44,39 @@ def calculator(first_num: float, second_num: float, operation: str)->dict:
         return{ "first_num": first_num, "Second_num": second_num, "Operation": operation, "result": result}
     except Exception as e:
         return {"error": str(e)}
+
+@tool
+def get_stock_price(symbol: str) -> dict:
+    """
+    Fetch the latest stock price for a given symbol
+    (e.g. AAPL, TSLA) using Alpha Vantage API.
+    """
+
+    url = "https://www.alphavantage.co/query"
+
+    params = {
+        "function": "GLOBAL_QUOTE",
+        "symbol": symbol.upper(),
+        "apikey": API_KEY
+    }
+
+    response = requests.get(url, params=params, timeout=30)
+    response.raise_for_status()
+
+    data = response.json()
+
+    quote = data.get("Global Quote")
+
+    if not quote:
+        return {
+            "error": data.get("Note")
+                     or data.get("Error Message")
+                     or "Stock data unavailable."
+        }
+
+    return {
+        "symbol": quote.get("01. symbol"),
+        "price": quote.get("05. price"),
+        "change": quote.get("09. change"),
+        "change_percent": quote.get("10. change percent")
+    }
