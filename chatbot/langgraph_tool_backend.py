@@ -11,3 +11,6 @@ from langchain_core.tools import tool
 import requests
 import random
 import os
+
+load_dotenv()
+API_KEY = os.getenv('ALPHA_VANTAGE_API_KEY')
