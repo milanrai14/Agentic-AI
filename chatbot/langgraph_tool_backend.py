@@ -84,22 +84,78 @@ def get_stock_price(symbol: str) -> dict:
         "change_percent": quote.get("10. change percent")
     }
 
-@tool 
-def list_github_prs(owner: str, repo: str, state: str = "open", per_page: int = 5): 
+@tool
+def list_github_prs(
+    owner: str,
+    repo: str,
+    state: str = "open",
+    per_page: int = 5
+) -> list:
     """
-    List the latest pull requests for a github reporisitory. 
+    List the latest pull requests for a GitHub repository.
 
-    Args: 
-    owner: Github org or username (eg: "langgraph-ai")
-    repo: Repository name (eg: "langgraph")
-    state: "open", "closed", or "all"
-    per_page: Number of PRs to fetch (max 100)
+    Args:
+        owner: GitHub organization or username.
+        repo: Repository name.
+        state: "open", "closed", or "all".
+        per_page: Number of PRs to fetch (max 100).
 
-    Returns: 
-    A simplified list of PR info dictionries
+    Returns:
+        A simplified list of PR information dictionaries.
     """
-    token = os.getenv("GITHUB_TOKEN") # optional, for hogher rate limits
-    
+
+    # GitHub API URL
+    url = f"https://api.github.com/repos/{owner}/{repo}/pulls"
+
+    # Optional authentication token
+    token = os.getenv("GITHUB_TOKEN")
+
+    # Request headers
+    headers = {
+        "Accept": "application/vnd.github+json"
+    }
+
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+
+    # Query parameters
+    params = {
+        "state": state,
+        "per_page": max(1, min(per_page, 100)),
+        "sort": "created",
+        "direction": "desc"
+    }
+
+    try:
+        response = requests.get(
+            url,
+            headers=headers,
+            params=params,
+            timeout=15
+        )
+
+        response.raise_for_status()
+
+        pull_requests = response.json()
+
+        # Simplify the response
+        results = []
+
+        for pr in pull_requests:
+            results.append({
+                "number": pr["number"],
+                "title": pr["title"],
+                "author": pr["user"]["login"],
+                "state": pr["state"],
+                "url": pr["html_url"],
+                "created_at": pr["created_at"],
+                "updated_at": pr["updated_at"]
+            })
+
+        return results
+
+    except requests.exceptions.RequestException as e:
+        return [{"error": str(e)}]
 
 # Make tool list 
 tools = [get_stock_price, search_tool, calculator]
