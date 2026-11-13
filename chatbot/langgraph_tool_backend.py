@@ -84,6 +84,23 @@ def get_stock_price(symbol: str) -> dict:
         "change_percent": quote.get("10. change percent")
     }
 
+@tool 
+def list_github_prs(owner: str, repo: str, state: str = "open", per_page: int = 5): 
+    """
+    List the latest pull requests for a github reporisitory. 
+
+    Args: 
+    owner: Github org or username (eg: "langgraph-ai")
+    repo: Repository name (eg: "langgraph")
+    state: "open", "closed", or "all"
+    per_page: Number of PRs to fetch (max 100)
+
+    Returns: 
+    A simplified list of PR info dictionries
+    """
+    token = os.getenv("GITHUB_TOKEN") # optional, for hogher rate limits
+    
+
 # Make tool list 
 tools = [get_stock_price, search_tool, calculator]
 
