@@ -15,6 +15,8 @@ load_dotenv()  # Load environment variables from .env file
 
 llm = ChatOllama(model='llama3.2')
 
+#MCP client for the local FastMCP server
+
 
 
 tools = [calculator]
