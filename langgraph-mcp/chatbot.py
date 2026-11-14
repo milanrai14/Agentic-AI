@@ -195,9 +195,13 @@ graph.add_edge("tools", "chat_node")
 
 chatbot = graph.compile(checkpointer=checkpointer)
 
+#running the graph 
+result = chatbot.invoke({'message': [HumanMessage(content="Find the modulus of 132354 and 23 and give answer like a cricket commentor.")]})
+
+print(result['messages'][-1].content)
 #Helper 
-def retrieve_all_threads(): 
-    all_threads = set()
-    for checkpoint in checkpointer.list(None):
-        all_threads.add(checkpoint.config['configurable']['thread_id'])
-    return list(all_threads)
+# def retrieve_all_threads(): 
+#     all_threads = set()
+#     for checkpoint in checkpointer.list(None):
+#         all_threads.add(checkpoint.config['configurable']['thread_id'])
+#     return list(all_threads)
