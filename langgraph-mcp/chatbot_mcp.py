@@ -36,16 +36,19 @@ client = MultiServerMCPClient(
         }
     )
 
-tools = [calculator]
 
-llm_with_tools = llm.bind_tools(tools)
 
 # state
 class ChatState(TypedDict):
     messages: Annotated[list[BaseMessage], add_messages]
 
 
-def build_graph():
+async def build_graph():
+    tools = await client.get_tools()
+    print(tools)
+
+    llm_with_tools = llm.bind_tools(tools)
+
     # nodes
     async def chat_node(state: ChatState): 
         messages = state['messages']
