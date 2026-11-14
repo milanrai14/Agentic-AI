@@ -73,8 +73,6 @@ def build_graph():
     return chatbot 
 
 async def main(): 
-
-
     chatbot = build_graph()
     result =  await chatbot.ainvoke({"messages": [HumanMessage(content="Find the modulus of 132354 and 23 and give answer like a cricket commentator.")]})
     print(result['message'][-1].content)
