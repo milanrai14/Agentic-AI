@@ -196,7 +196,15 @@ graph.add_edge("tools", "chat_node")
 chatbot = graph.compile(checkpointer=checkpointer)
 
 #running the graph 
-result = chatbot.invoke({'message': [HumanMessage(content="Find the modulus of 132354 and 23 and give answer like a cricket commentor.")]})
+# result = chatbot.invoke({'message': [HumanMessage(content="Find the modulus of 132354 and 23 and give answer like a cricket commentor.")]})
+
+result = chatbot.invoke({
+    'message': [
+        HumanMessage(
+            content="Find the modulus of 132354 and 23 and give answer like a cricket commentor."
+        )
+    ]
+})
 
 print(result['messages'][-1].content)
 #Helper 
