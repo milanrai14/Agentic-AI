@@ -198,15 +198,27 @@ chatbot = graph.compile(checkpointer=checkpointer)
 #running the graph 
 # result = chatbot.invoke({'message': [HumanMessage(content="Find the modulus of 132354 and 23 and give answer like a cricket commentor.")]})
 
-result = chatbot.invoke({
-    'message': [
-        HumanMessage(
-            content="Find the modulus of 132354 and 23 and give answer like a cricket commentor."
-        )
-    ]
-})
+# Running the graph
+
+config = {
+    "configurable": {
+        "thread_id": "milan-chat-1"
+    }
+}
+
+result = chatbot.invoke(
+    {
+        "messages": [
+            HumanMessage(
+                content="Find the modulus of 132354 and 23 and give the answer like a cricket commentator."
+            )
+        ]
+    },
+    config=config
+)
 
 print(result['messages'][-1].content)
+
 #Helper 
 # def retrieve_all_threads(): 
 #     all_threads = set()
