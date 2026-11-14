@@ -46,3 +46,35 @@ llm_with_tools = llm.bind_tools(tools)
 class ChatState(TypedDict):
     messages: Annotated[list[BaseMessage], add_messages]
 
+
+def build_graph():
+    # nodes
+    async def chat_node(state: ChatState): 
+        messages = state['messages']
+        response = await llm_with_tools.ainvoke(messages)
+        return {'messaages': [response]}
+    
+    tool_node = ToolNode(tools)
+
+    #definig graph and nodes 
+    graph = StateGraph(ChatState)
+
+    graph.add_node("chat_node", chat_node)
+    graph.add_node("tools", tool_node)
+
+    #defining graph connection
+    graph.add_edge(START, "chat_node")
+    graph.add_edge("chat_node", tools_condition)
+    graph.add_edge("tools", "chat_node")
+    
+    return chatbot 
+
+async def main(): 
+
+
+    chatbot = build_graph()
+    result =  await chatbot.ainvoke({"messages": [HumanMessage(content="Find the modulus of 132354 and 23 and give answer like a cricket commentator.")]})
+    print(result['message'][-1].content)
+
+if __name__ == '__main__': 
+    asyncio.run(main())
