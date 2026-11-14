@@ -52,7 +52,7 @@ def build_graph():
     async def chat_node(state: ChatState): 
         messages = state['messages']
         response = await llm_with_tools.ainvoke(messages)
-        return {'messaages': [response]}
+        return {'messages': [response]}
     
     tool_node = ToolNode(tools)
 
@@ -64,7 +64,7 @@ def build_graph():
 
     #defining graph connection
     graph.add_edge(START, "chat_node")
-    graph.add_edge("chat_node", tools_condition)
+    graph.add_conditional_edges("chat_node", tools_condition)
     graph.add_edge("tools", "chat_node")
 
 
@@ -75,7 +75,7 @@ def build_graph():
 async def main(): 
     chatbot = build_graph()
     result =  await chatbot.ainvoke({"messages": [HumanMessage(content="Find the modulus of 132354 and 23 and give answer like a cricket commentator.")]})
-    print(result['message'][-1].content)
+    print(result['messages'][-1].content)
 
 if __name__ == '__main__': 
     asyncio.run(main())
