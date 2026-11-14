@@ -41,3 +41,8 @@ def calculator(first_num: float, second_num: float, operation: str) -> dict:
 tools = [calculator]
 
 llm_with_tools = llm.bind_tools(tools)
+
+# state
+class ChatState(TypedDict):
+    messages: Annotated[list[BaseMessage], add_messages]
+
