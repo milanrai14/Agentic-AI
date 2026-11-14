@@ -66,7 +66,10 @@ def build_graph():
     graph.add_edge(START, "chat_node")
     graph.add_edge("chat_node", tools_condition)
     graph.add_edge("tools", "chat_node")
-    
+
+
+    chatbot = graph.compile()
+
     return chatbot 
 
 async def main(): 
