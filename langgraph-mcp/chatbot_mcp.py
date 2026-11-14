@@ -9,7 +9,8 @@ from langgraph.prebuilt import ToolNode, tools_condition
 from langchain_core.tools import tool
 import asyncio
 from langchain_mcp_adapters.client import MultiServerMCPClient
-
+import sys
+from pathlib import Path
 
 load_dotenv()  # Load environment variables from .env file
 
@@ -17,7 +18,23 @@ llm = ChatOllama(model='llama3.2')
 
 #MCP client for the local FastMCP server
 
+    # Locate the MCP server file
+server_path = (
+    Path(__file__).parent
+        / "mcp_server"
+        / "arithmetic_server.py"
+    )
 
+    # Configure MCP server connection
+client = MultiServerMCPClient(
+        {
+            "arithmetic": {
+                "transport": "stdio",
+                "command": sys.executable,
+                "args": [str(server_path)]
+            }
+        }
+    )
 
 tools = [calculator]
 

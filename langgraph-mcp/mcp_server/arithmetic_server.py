@@ -1,7 +1,6 @@
 
 from mcp.server.fastmcp import FastMCP
 
-# Create an MCP server
 mcp = FastMCP("Arithmetic Server")
 
 
@@ -13,7 +12,7 @@ def add(a: float, b: float) -> float:
 
 @mcp.tool()
 def subtract(a: float, b: float) -> float:
-    """Subtract the second number from the first number."""
+    """Subtract b from a."""
     return a - b
 
 
@@ -25,7 +24,7 @@ def multiply(a: float, b: float) -> float:
 
 @mcp.tool()
 def divide(a: float, b: float) -> float:
-    """Divide the first number by the second number."""
+    """Divide a by b."""
     if b == 0:
         raise ValueError("Division by zero is not allowed.")
     return a / b
@@ -33,12 +32,11 @@ def divide(a: float, b: float) -> float:
 
 @mcp.tool()
 def modulus(a: int, b: int) -> int:
-    """Return the remainder when a is divided by b."""
+    """Calculate the remainder when a is divided by b."""
     if b == 0:
         raise ValueError("Modulus by zero is not allowed.")
     return a % b
 
 
 if __name__ == "__main__":
-    # Run using the standard input/output transport
     mcp.run(transport="stdio")
