@@ -11,3 +11,11 @@ from typing import Annotated, TypedDict
 from langgraph.graph.message import add_messages
 from langchain_core.messages import HumanMessage, BaseMessage
 from langgraph.prebuilt import ToolNode, tools_condition
+import os
+
+load_dotenv()
+API_KEY = os.getenv('ALPHA_VANTAGE_API_KEY')
+
+def get_llm(): 
+    llm = ChatOllama(model='llama3.2')
+    return llm
