@@ -61,6 +61,9 @@ def purchase_stock(symbol: str, quantity: int) -> dict:
     - No real brokerage API is called.
     - It simply returns a confirmation payload.
     """
+
+    #this pauses the graph and returns control to the caller 
+    decision = interrupt(f"Approve buying {quantity} shares of {symbol}? (yes/no)")
     return{
         "status": "success", 
         "message": f"Purchase order placed for {quantity} shares of  {symbol}", 
