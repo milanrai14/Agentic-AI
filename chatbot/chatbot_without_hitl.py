@@ -65,3 +65,7 @@ def purchase_stock(symbol: str, quantity: int) -> dict:
         "symbol": symbol, 
         "quantity": quantity
     }
+
+tools = [get_stock_price, purchase_stock]
+
+llm_with_tools = llm.bind_tools(tools)
