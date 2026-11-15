@@ -8,9 +8,10 @@ from langgraph.prebuilt import ToolNode, tools_condition
 from langchain_core.tools import tool
 from dotenv import load_dotenv
 import requests
+import os
 
 load_dotenv()
-
+API_KEY = os.getenv('ALPHA_VANTAGE_API_KEY')
 #LLM
 llm = ChatOllama(model="llama3.2")
 
@@ -98,3 +99,31 @@ graph.add_conditional_edges("chat_node", tools_condition)
 graph.add_edge("tools", "chat_node")
 
 chatbot = graph.compile(checkpointer=memory)
+# 7. Simple usage example (CLI)
+# -------------------
+if __name__ == "__main__":
+    print("📈 Stock Bot with Tools (get_stock_price, purchase_stock)")
+    print("Type 'exit' to quit.\n")
+
+    # thread_id still works with MemorySaver (conversation kept in RAM)
+    thread_id = "demo-thread"
+
+    while True:
+        user_input = input("You: ")
+        if user_input.lower().strip() in {"exit", "quit"}:
+            print("Goodbye!")
+            break
+
+        # Build initial state for this turn
+        state = {"messages": [HumanMessage(content=user_input)]}
+
+        # Run the graph
+        result = chatbot.invoke(
+            state,
+            config={"configurable": {"thread_id": thread_id}},
+        )
+
+        # Get the latest message from the assistant
+        messages = result["messages"]
+        last_msg = messages[-1]
+        print(f"Bot: {last_msg.content}\n")
