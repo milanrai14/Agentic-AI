@@ -69,3 +69,16 @@ def purchase_stock(symbol: str, quantity: int) -> dict:
 tools = [get_stock_price, purchase_stock]
 
 llm_with_tools = llm.bind_tools(tools)
+
+#State 
+class ChatState(TypedDict):
+    messages: Annotated[list[BaseMessage], add_messages]
+
+# nodes
+def chat_node(state: ChatState): 
+    """
+    LLM node that may answer or request a tool call.
+    """
+    messages = state['messages']
+    response = llm_with_tools.invoke(messages)
+    return {"messages": [response]}
