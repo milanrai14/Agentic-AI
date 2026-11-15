@@ -50,3 +50,18 @@ def get_stock_price(symbol: str) -> dict:
         "change": quote.get("09. change"),
         "change_percent": quote.get("10. change percent")
     }
+
+@tool
+def purchase_stock(symbol: str, quantity: int) -> dict: 
+    """
+    Simulate purchasing a given quantity of a stock symbol.
+    Note: this is a mock implementaiton: 
+    - No real brokerage API is called.
+    - It simply returns a confirmation payload.
+    """
+    return{
+        "status": "success", 
+        "message": f"Purchase order placed for {quantity} shares of  {symbol}", 
+        "symbol": symbol, 
+        "quantity": quantity
+    }
