@@ -64,12 +64,22 @@ def purchase_stock(symbol: str, quantity: int) -> dict:
 
     #this pauses the graph and returns control to the caller 
     decision = interrupt(f"Approve buying {quantity} shares of {symbol}? (yes/no)")
-    return{
-        "status": "success", 
-        "message": f"Purchase order placed for {quantity} shares of  {symbol}", 
-        "symbol": symbol, 
-        "quantity": quantity
-    }
+
+    if isinstance(decision, str) and decision.lower() == "yes": 
+
+        return{
+            "status": "success", 
+            "message": f"Purchase order placed for {quantity} shares of  {symbol}", 
+            "symbol": symbol, 
+            "quantity": quantity
+        }
+    else: 
+        return {
+            "status": "cancelled",
+            "message": f"Purchase of {quantity} shares of {symbol} was declined by human.",
+            "symbol": symbol,
+            "quantity": quantity,
+        }
 
 tools = [get_stock_price, purchase_stock]
 
