@@ -82,3 +82,19 @@ def chat_node(state: ChatState):
     messages = state['messages']
     response = llm_with_tools.invoke(messages)
     return {"messages": [response]}
+
+tool_node = ToolNode(tools)
+
+#checkpointer 
+memory =  MemorySaver()
+
+graph = StateGraph(ChatState)
+graph.add_node("chat_node", chat_node)
+graph.add_node("tools", tool_node)
+
+graph.add_edge(START, "chat_node")
+
+graph.add_conditional_edges("chat_node", tools_condition)
+graph.add_edge("tools", "chat_node")
+
+chatbot = graph.compile(checkpointer=memory)
