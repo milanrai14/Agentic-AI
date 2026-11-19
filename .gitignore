@@ -1,2 +1,4 @@
 venv/
 .git/
+# Ignore documents folder
+rag/documents/
