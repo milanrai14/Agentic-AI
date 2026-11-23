@@ -3,3 +3,4 @@ venv/
 # Ignore documents folder
 rag/documents/
 .env/
+.env
